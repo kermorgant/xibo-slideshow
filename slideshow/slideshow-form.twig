@@ -1,0 +1,99 @@
+{% extends "form-base.twig" %}
+{% import "forms.twig" as forms %}
+
+
+{% block formFieldActions %}
+  [{
+  "field": "effect",
+  "trigger": "init",
+  "value": "",
+  "operation": "equals",
+  "actions": {
+  ".effect-controls": { "display": "none" }
+  }
+  },{
+  "field": "effect",
+  "trigger": "change",
+  "value": "",
+  "operation": "equals",
+  "actions": {
+  ".effect-controls": { "display": "none" }
+  }
+  },{
+  "field": "effect",
+  "trigger": "init",
+  "value": "",
+  "operation": "not",
+  "actions": {
+  ".effect-controls": { "display": "block" }
+  }
+  },{
+  "field": "effect",
+  "trigger": "change",
+  "value": "",
+  "operation": "not",
+  "actions": {
+  ".effect-controls": { "display": "block" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "init",
+  "value": false,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "none" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "change",
+  "value": false,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "none" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "init",
+  "value": true,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "block" }
+  }
+  },{
+  "field": "useDuration",
+  "trigger": "change",
+  "value": true,
+  "operation": "is:checked",
+  "actions": {
+  ".duration-fields": { "display": "block" }
+  }
+  }]
+{% endblock %}
+
+
+{% block callBack %}imageFormCallBack{% endblock %}
+
+{% block formHtml %}
+  <style type="text/css">
+   ul#SlideshowAssignSortable {
+     display: inline-block;
+     padding: 0;
+     margin: 0;
+   }
+   ul, ol {
+     margin-bottom: 10px;
+     margin-top: 0;
+   }    
+   #SlideshowAssignSortable .li-sortable {
+     background-color: #e5f0ff;
+     border: 1px solid #8080ff;
+     cursor: pointer;
+     list-style: outside none none;
+     margin: 5px;
+     padding: 5px;
+   }
+  </style>
+  
+  {% block slideshowFormHtml %}{% endblock %}
+
+{% endblock %}

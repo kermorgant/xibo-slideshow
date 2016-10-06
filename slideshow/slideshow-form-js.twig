@@ -1,0 +1,130 @@
+<script type="text/javascript">
+ var AssignedMediaSubmit = function() {
+   // Collect our media
+   var media = '';
+   $("#SlideshowAssignSortable > li").each(function() {
+     media = media + ',[' + $(this).data().mediaId + ']';
+   });
+   var useDuration = $("#useDuration").val();
+   var duration = $("#duration").val();
+   var effect = $("#effect").val();	
+
+   $.ajax({
+     type: "post",
+     url: $("#SlideshowAssign").data().url,
+     cache: false,
+     dataType: "json",
+     data: {
+       mediaList: media.substring(1),
+       useDuration: useDuration,
+       duration: duration,
+       effect: effect
+       
+     },
+     success: XiboSubmitResponse
+   });	
+ };
+
+ var AssignedMediaPut = function() {
+   // Collect our media
+   var media = '';
+   $("#SlideshowAssignSortable > li").each(function() {
+     media = media + ',[' + $(this).data().mediaId + ']';
+   });
+   var useDuration = $("#useDuration").val();
+   var duration = $("#duration").val();
+   var effect = $("#effect").val();
+
+   $.ajax({
+     type: "put",
+     url: $("#SlideshowAssign").data().url,
+     cache: false,
+     dataType: "json",
+     data: {
+       mediaList: media.substring(1),
+       useDuration: useDuration,
+       duration: duration,
+       effect: effect
+     },
+     success: XiboSubmitResponse
+   });	
+ };
+
+
+
+ function imageFormCallBack() {
+   // prevent filter form submit
+   $("#SlideshowAssignFilterOptions").find("form").on("submit", function(e) {
+     e.preventDefault();
+     return false;
+   });
+
+   var mediaTable = $("#mediaAssignments").DataTable({
+     "language": dataTablesLanguage,
+     serverSide: true, stateSave: true,
+     searchDelay: 3000,
+     "order": [[1, "asc"]],
+     "filter": false,
+     ajax: {
+       url: "{{ urlFor('library.search') }}", 
+       "data": { 
+	 'type': 'image'
+       }
+     },
+     "columns": [
+       {"data": "mediaId"},
+       {"data": "name"},
+       {"data": "mediaType"},
+       {
+	 "sortable": false,
+	 "data": function (data, type, row, meta) {
+	   if (type != "display")
+	     return "";
+
+	   // Create a click-able span
+	   return "<a href=\"#\" class=\"assignItem\"><span class=\"glyphicon glyphicon-plus-sign\"></a>";
+	 }
+       }
+     ]
+   });
+
+   mediaTable.on('draw', function (e, settings) {
+     dataTableDraw(e, settings);
+
+     // Clicky on the +spans
+     $(".assignItem", "#mediaAssignments").click(function () {
+       // Get the row that this is in.
+       var data = mediaTable.row($(this).closest("tr")).data();
+
+       // Construct a new list item for the lower list and append it.
+       var newItem = $("<li/>", {
+	 "text": " " + data.name,
+	 "data-media-id": data.mediaId,
+	 "class": "li-sortable",
+	 "dblclick": function () {
+	   $(this).remove();
+	 }
+       });
+
+       newItem.appendTo("#SlideshowAssignSortable");
+
+       // Add a span to that new item
+       $("<span/>", {
+	 "class": "glyphicon glyphicon-minus-sign",
+	 click: function () {
+	   $(this).parent().remove();
+	 }
+       }).prependTo(newItem);
+     });
+   });
+   mediaTable.on('processing.dt', dataTableProcessing);
+
+   // Make our little list sortable
+   $("#SlideshowAssignSortable").sortable();
+
+   // Bind the filter form
+   $("#SlideshowAssignFilterOptions").find("input, select").change(function () {
+     mediaTable.ajax.reload();
+   });
+ }
+</script>

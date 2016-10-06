@@ -1,0 +1,117 @@
+{% extends "slideshow-form.twig" %}
+{% import "forms.twig" as forms %}
+
+{% block formTitle %}
+    {% trans "Edit Slideshow" %}
+{% endblock %}
+
+{% block formButtons %}
+  {% trans "Cancel" %}, XiboDialogClose()
+  {% trans "Save" %}, AssignedMediaPut()
+{% endblock %}
+
+{% block slideshowFormHtml %}
+ 
+  <div class="row">
+    <div class="col-sm-12">
+      {% set title %}{% trans "Set a duration?" %}{% endset %}
+      {% set helpText %}{% trans "Select to provide a specific duration for this Widget" %}{% endset %}
+      {{ forms.checkbox("useDuration", title, module.getUseDuration(), helpText) }}
+
+      {% set title %}{% trans "Duration" %}{% endset %}
+      {% set helpText %}{% trans "The duration in seconds this should be displayed" %}{% endset %}
+      {{ forms.number("duration", title, module.getDuration(), helpText, "duration-fields", "required") }}
+
+      {% set title %}{% trans "Effect" %}{% endset %}
+      {% set helpText %}{% trans "Please select the effect that will be used to transition between items." %}{% endset %}
+      {% set noneOption %}{% trans "None" %}{% endset %}
+      {% set fade %}{% trans "Fade" %}{% endset %}
+      {% set fadeout %}{% trans "Fade Out" %}{% endset %}
+      {% set scrollHorz %}{% trans "Scroll Horizontal" %}{% endset %}
+      {% set scrollVert %}{% trans "Scroll Vertical" %}{% endset %}
+      {% set flipHorz %}{% trans "Flip Horizontal" %}{% endset %}
+      {% set flipVert %}{% trans "Flip Vertical" %}{% endset %}
+      {% set shuffle %}{% trans "shuffle" %}{% endset %}
+      {% set tileSlide %}{% trans "Tile Slide" %}{% endset %}
+      {% set tileBlind %}{% trans "Tile Blind" %}{% endset %}
+      {% set options = [
+      { effectid: "none", effect: noneOption },
+      { effectid: "fade", effect: fade },
+      { effectid: "fadeout", effect: fadeout},
+      { effectid: "scrollHorz", effect: scrollHorz},
+      { effectid: "scrollVert", effect: scrollVert},
+      { effectid: "flipHorz", effect: flipHorz},
+      { effectid: "flipVert", effect: flipVert},
+      { effectid: "shuffle", effect: shuffle},
+      { effectid: "tileSlide", effect: tileSlide},
+      { effectid: "tileBlind", effect: tileBlind}
+      ] %}
+      {{ forms.dropdown("effect", "single", title, module.getOption("effect"), options, "effectid", "effect", helpText) }}
+
+      
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8">
+      <div id="libraryAssignFilterOptions">
+        <form onsubmit="false">
+          <div class="row">
+	    <div class="col-md-6">
+	      {% set title %}{% trans "Name" %}{% endset %}
+	      {{ inline.input("media", title) }}
+	    </div>
+	    <div class="col-md-6">
+	      {% set title %}{% trans "Type" %}{% endset %}
+	      {{ inline.dropdown("type", "single", title, "", [{type: null, name: ""}], "type", "name") }}
+	    </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="XiboGrid" id="{{ random() }}">
+        <div class="XiboData">
+          <table id="mediaAssignments" class="table table-striped">
+	    <thead>
+	      <tr>
+                <th>{% trans "ID" %}</th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Type" %}</th>
+                    <th></th>
+		  </tr>
+		</thead>
+		<tbody>
+
+		</tbody>
+              </table>
+            </div>
+	  </div><!-- #libraryAssignFilterOptions -->
+    </div>
+	
+    <div class="col-md-4">
+      <div id="SlideshowAssign" class="well" data-url="{{ urlFor("module.widget.edit", {type: module.widget.type, id: module.widget.widgetId}) }} ">
+        <h4>{% trans "Assignments" %}</h4>
+        <div>
+          <ul id="SlideshowAssignSortable">
+	    {% for mediaId in module.mediaList %}
+              {% for item in media %}
+		{% if item.mediaId == mediaId %}
+		  <li id="MediaID_{{ item.mediaId }}" data-media-id="{{item.mediaId}}"class="li-sortable"><span class="glyphicon glyphicon-minus-sign"></span>{{ item.name }}</li>
+		{% endif %}
+              {% endfor %}
+            {% endfor %}	    
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    // Add a span to that new item
+    $("#SlideshowAssignSortable li span").click(function() {
+        $(this).parent().remove();
+    });
+  </script>
+
+  
+{% endblock %}
