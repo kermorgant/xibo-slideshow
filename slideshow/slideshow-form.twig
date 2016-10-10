@@ -35,38 +35,6 @@
   "actions": {
   ".effect-controls": { "display": "block" }
   }
-  },{
-  "field": "useDuration",
-  "trigger": "init",
-  "value": false,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "none" }
-  }
-  },{
-  "field": "useDuration",
-  "trigger": "change",
-  "value": false,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "none" }
-  }
-  },{
-  "field": "useDuration",
-  "trigger": "init",
-  "value": true,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "block" }
-  }
-  },{
-  "field": "useDuration",
-  "trigger": "change",
-  "value": true,
-  "operation": "is:checked",
-  "actions": {
-  ".duration-fields": { "display": "block" }
-  }
   }]
 {% endblock %}
 
@@ -83,7 +51,7 @@
    ul, ol {
      margin-bottom: 10px;
      margin-top: 0;
-   }    
+   }
    #SlideshowAssignSortable .li-sortable {
      background-color: #e5f0ff;
      border: 1px solid #8080ff;
@@ -93,7 +61,7 @@
      padding: 5px;
    }
   </style>
-  
+
   {% block slideshowFormHtml %}{% endblock %}
 
 {% endblock %}

@@ -92,7 +92,7 @@ class Slideshow extends ModuleWidget
 
     public function validate()
     {
-        if ($this->getUseDuration() == 1 && $this->getDuration() == 0)
+        if ($this->getDuration() == 0)
             throw new \InvalidArgumentException(__('Please enter a duration'));
 
         if (count($this->getMediaList()) < 2)
@@ -139,29 +139,20 @@ class Slideshow extends ModuleWidget
      */
     public function setCommonOptions()
     {
-        $useDuration = $this->getSanitizer()->getCheckbox('useDuration');
+
+        $imageDuration = $this->getSanitizer()->getInt('imageDuration', 4000);
+
         $mediaListString = $this->getSanitizer()->getString('mediaList');
 
-        $this->setUseDuration($useDuration);
+        $this->setOption('imageDuration', $imageDuration);
         $this->setOption('mediaList', $mediaListString);
         $this->setOption('effect', $this->getSanitizer()->getString('effect'));
 
         // set duration according to user input or sum of media duration
-        if ( $useDuration)
-        {
-            $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
-        }
-        else
-        {
-            $mediaList = explode(',', $mediaListString);
-            $defaultDuration = 0;
-            foreach ($mediaList as $mediaId)
-            {
-                $media = $this->mediaFactory->getById($mediaId);
-                $defaultDuration += $media->duration;
-            }
-            $this->setDuration($defaultDuration);
-        }
+        $mediaList = explode(',', $mediaListString);
+        $duration = ((count($mediaList) * $imageDuration) / 1000);
+
+        $this->setDuration($duration);
     }
 
 
@@ -196,20 +187,28 @@ class Slideshow extends ModuleWidget
         $body = <<<'EOD'
 <div class="cycle-slideshow"
     data-cycle-fx=##EFFECT##
-    data-cycle-timeout=4000
-    data-cycle-pager="#adv-custom-pager"
-    data-cycle-pager-template="<a href='#'><img src='{{src}}' width=20 height=20></a>"
+    data-cycle-timeout=##IMAGE_DURATION##
+    data-cycle-loader=true
+    data-cycle-progressive="#images2"
     >
 EOD;
         $body = str_replace('##EFFECT##',
                             $this->getOption('effect', 'tileBlind'),
                             $body);
+        $body = str_replace('##IMAGE_DURATION##',
+                            $this->getOption('imageDuration', 4000),
+                            $body);
+
         $mediaList = explode(',',$this->parseLibraryReferences($isPreview, $this->getOption('mediaList', null)));
 
+
+        $body .= '<img src="' . array_shift($mediaList) . '" style="width: 100%; height: auto;"/>';
+
+        $body .= '<script id="images2" type="text/cycle">';
         foreach($mediaList as $media) {
-            $body .= '<img src="' . $media . '" style="width: 100%; height: auto;"/>';
+            $body .= '<img src="' . $media . '" style="width: 100%; height: auto;"/>' . "\n";
         }
-        $body .= '</div><div id=adv-custom-pager class="center external"></div>';
+        $body .= '</script></div>';
 
         $data['javaScript'] = $javaScriptContent;
         $data['body'] = $body;

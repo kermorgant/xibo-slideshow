@@ -15,14 +15,9 @@
 
   <div class="row">
     <div class="col-sm-12">
-      {% set title %}{% trans "Set a duration?" %}{% endset %}
-      {% set helpText %}{% trans "Specific duration for this Widget (this may
-      interrupt the slideshow before the end)" %}{% endset %}
-      {{ forms.checkbox("useDuration", title, 0, helpText) }}
-
-      {% set title %}{% trans "Duration" %}{% endset %}
-      {% set helpText %}{% trans "The duration in seconds this should be displayed" %}{% endset %}
-      {{ forms.number("duration", title, module.getModule().defaultDuration, helpText, "duration-fields", "required") }}
+      {% set title %}{% trans "Image duration" %}{% endset %}
+      {% set helpText %}{% trans "The duration in milliseconds each image should be displayed" %}{% endset %}
+      {{ forms.number("imageDuration", title, module.getOption("imageDuration"), helpText, "image-duration", "required") }}
 
       {% set title %}{% trans "Effect" %}{% endset %}
       {% set helpText %}{% trans "Please select the effect that will be used to transition between items." %}{% endset %}

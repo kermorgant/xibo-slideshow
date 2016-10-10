@@ -5,8 +5,7 @@
    $("#SlideshowAssignSortable > li").each(function() {
      media = media + ',[' + $(this).data().mediaId + ']';
    });
-   var useDuration = $("#useDuration").is(':checked');
-   var duration = $("#duration").val();
+   var imageDuration = $("#imageDuration").val();
    var effect = $("#effect").val();
 
    $.ajax({
@@ -16,8 +15,7 @@
      dataType: "json",
      data: {
        mediaList: media.substring(1),
-       useDuration: useDuration,
-       duration: duration,
+       imageDuration: imageDuration,
        effect: effect
 
      },
@@ -25,29 +23,28 @@
    });
  };
 
- var AssignedMediaPut = function() {
-   // Collect our media
-   var media = '';
-   $("#SlideshowAssignSortable > li").each(function() {
-     media = media + ',[' + $(this).data().mediaId + ']';
-   });
-   var useDuration = $("#useDuration").is(':checked');
-   var duration = $("#duration").val();
-   var effect = $("#effect").val();
+var AssignedMediaPut = function() {
+    // Collect our media
+    var media = '';
+    $("#SlideshowAssignSortable > li").each(function() {
+        media = media + ',[' + $(this).data().mediaId + ']';
+    });
 
-   $.ajax({
-     type: "put",
-     url: $("#SlideshowAssign").data().url,
-     cache: false,
-     dataType: "json",
-     data: {
-       mediaList: media.substring(1),
-       useDuration: useDuration,
-       duration: duration,
-       effect: effect
-     },
-     success: XiboSubmitResponse
-   });
+    var imageDuration = $("#imageDuration").val();
+    var effect = $("#effect").val();
+
+    $.ajax({
+        type: "put",
+        url: $("#SlideshowAssign").data().url,
+        cache: false,
+        dataType: "json",
+        data: {
+            mediaList: media.substring(1),
+            imageDuration: imageDuration,
+            effect: effect
+        },
+        success: XiboSubmitResponse
+    });
  };
 
 
