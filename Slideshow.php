@@ -94,6 +94,8 @@ class Slideshow extends ModuleWidget
     {
         if ($this->getDuration() == 0)
             throw new \InvalidArgumentException(__('Please enter a duration'));
+        elseif ($this->getDuration() < 100)
+            throw new \InvalidArgumentException(__('Duration is in milliseconds !'));
 
         if (count($this->getMediaList()) < 2)
             throw new \InvalidArgumentException(__('Please add at least 2 images' ));
@@ -139,6 +141,7 @@ class Slideshow extends ModuleWidget
      */
     public function setCommonOptions()
     {
+        $this->setUseDuration(true); // we won't use media duration
 
         $imageDuration = $this->getSanitizer()->getInt('imageDuration', 4000);
 
