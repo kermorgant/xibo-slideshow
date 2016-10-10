@@ -97,6 +97,8 @@ class Slideshow extends ModuleWidget
 
         if (count($this->getMediaList()) < 2)
             throw new \InvalidArgumentException(__('Please add at least 2 images' ));
+        elseif (count($this->getMediaList()) > 10)
+            throw new \InvalidArgumentException(__('Please select less than 10 images' ));
     }
 
 
@@ -113,10 +115,7 @@ class Slideshow extends ModuleWidget
      */
     public function add()
     {
-        $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
-        $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
-        $this->setOption('effect', $this->getSanitizer()->getString('effect'));
-        $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
+        $this->setCommonOptions();
 
         //Save the widget
         $this->validate();
@@ -128,16 +127,42 @@ class Slideshow extends ModuleWidget
      */
     public function edit()
     {
-        $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
-        $this->setUseDuration($this->getSanitizer()->getCheckbox('useDuration'));
-        $this->setOption('effect', $this->getSanitizer()->getString('effect'));
-        $this->setOption('mediaList', $this->getSanitizer()->getString('mediaList'));
+        $this->setCommonOptions();
 
         // Save the widget
         $this->validate();
         $this->saveWidget();
     }
 
+    /**
+     * Setting of common options for the add & edit forms
+     */
+    public function setCommonOptions()
+    {
+        $useDuration = $this->getSanitizer()->getCheckbox('useDuration');
+        $mediaListString = $this->getSanitizer()->getString('mediaList');
+
+        $this->setUseDuration($useDuration);
+        $this->setOption('mediaList', $mediaListString);
+        $this->setOption('effect', $this->getSanitizer()->getString('effect'));
+
+        // set duration according to user input or sum of media duration
+        if ( $useDuration)
+        {
+            $this->setDuration($this->getSanitizer()->getInt('duration', $this->getDuration()));
+        }
+        else
+        {
+            $mediaList = explode(',', $mediaListString);
+            $defaultDuration = 0;
+            foreach ($mediaList as $mediaId)
+            {
+                $media = $this->mediaFactory->getById($mediaId);
+                $defaultDuration += $media->duration;
+            }
+            $this->setDuration($defaultDuration);
+        }
+    }
 
 
     /**

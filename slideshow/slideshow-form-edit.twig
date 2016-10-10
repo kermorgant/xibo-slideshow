@@ -11,11 +11,12 @@
 {% endblock %}
 
 {% block slideshowFormHtml %}
- 
+
   <div class="row">
     <div class="col-sm-12">
       {% set title %}{% trans "Set a duration?" %}{% endset %}
-      {% set helpText %}{% trans "Select to provide a specific duration for this Widget" %}{% endset %}
+      {% set helpText %}{% trans "Specific duration for this Widget (this may
+      interrupt the slideshow before the end)" %}{% endset %}
       {{ forms.checkbox("useDuration", title, module.getUseDuration(), helpText) }}
 
       {% set title %}{% trans "Duration" %}{% endset %}
@@ -48,7 +49,7 @@
       ] %}
       {{ forms.dropdown("effect", "single", title, module.getOption("effect"), options, "effectid", "effect", helpText) }}
 
-      
+
     </div>
   </div>
 
@@ -68,7 +69,7 @@
           </div>
         </form>
       </div>
-      
+
       <div class="XiboGrid" id="{{ random() }}">
         <div class="XiboData">
           <table id="mediaAssignments" class="table table-striped">
@@ -87,7 +88,7 @@
             </div>
 	  </div><!-- #libraryAssignFilterOptions -->
     </div>
-	
+
     <div class="col-md-4">
       <div id="SlideshowAssign" class="well" data-url="{{ urlFor("module.widget.edit", {type: module.widget.type, id: module.widget.widgetId}) }} ">
         <h4>{% trans "Assignments" %}</h4>
@@ -99,7 +100,7 @@
 		  <li id="MediaID_{{ item.mediaId }}" data-media-id="{{item.mediaId}}"class="li-sortable"><span class="glyphicon glyphicon-minus-sign"></span>{{ item.name }}</li>
 		{% endif %}
               {% endfor %}
-            {% endfor %}	    
+            {% endfor %}
           </ul>
         </div>
       </div>
@@ -113,5 +114,5 @@
     });
   </script>
 
-  
+
 {% endblock %}

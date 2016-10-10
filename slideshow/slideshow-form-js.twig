@@ -5,9 +5,9 @@
    $("#SlideshowAssignSortable > li").each(function() {
      media = media + ',[' + $(this).data().mediaId + ']';
    });
-   var useDuration = $("#useDuration").val();
+   var useDuration = $("#useDuration").is(':checked');
    var duration = $("#duration").val();
-   var effect = $("#effect").val();	
+   var effect = $("#effect").val();
 
    $.ajax({
      type: "post",
@@ -19,10 +19,10 @@
        useDuration: useDuration,
        duration: duration,
        effect: effect
-       
+
      },
      success: XiboSubmitResponse
-   });	
+   });
  };
 
  var AssignedMediaPut = function() {
@@ -31,7 +31,7 @@
    $("#SlideshowAssignSortable > li").each(function() {
      media = media + ',[' + $(this).data().mediaId + ']';
    });
-   var useDuration = $("#useDuration").val();
+   var useDuration = $("#useDuration").is(':checked');
    var duration = $("#duration").val();
    var effect = $("#effect").val();
 
@@ -47,7 +47,7 @@
        effect: effect
      },
      success: XiboSubmitResponse
-   });	
+   });
  };
 
 
@@ -66,8 +66,8 @@
      "order": [[1, "asc"]],
      "filter": false,
      ajax: {
-       url: "{{ urlFor('library.search') }}", 
-       "data": { 
+       url: "{{ urlFor('library.search') }}",
+       "data": {
 	 'type': 'image'
        }
      },

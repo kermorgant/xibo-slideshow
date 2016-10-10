@@ -9,20 +9,21 @@
   {% trans "Cancel" %}, XiboDialogClose()
   {% trans "Save" %}, AssignedMediaSubmit()
 {% endblock %}
-  
+
 {% block slideshowFormHtml %}
 
 
   <div class="row">
     <div class="col-sm-12">
       {% set title %}{% trans "Set a duration?" %}{% endset %}
-      {% set helpText %}{% trans "Select to provide a specific duration for this Widget" %}{% endset %}
+      {% set helpText %}{% trans "Specific duration for this Widget (this may
+      interrupt the slideshow before the end)" %}{% endset %}
       {{ forms.checkbox("useDuration", title, 0, helpText) }}
 
       {% set title %}{% trans "Duration" %}{% endset %}
       {% set helpText %}{% trans "The duration in seconds this should be displayed" %}{% endset %}
       {{ forms.number("duration", title, module.getModule().defaultDuration, helpText, "duration-fields", "required") }}
-      
+
       {% set title %}{% trans "Effect" %}{% endset %}
       {% set helpText %}{% trans "Please select the effect that will be used to transition between items." %}{% endset %}
       {% set noneOption %}{% trans "None" %}{% endset %}
@@ -47,7 +48,7 @@
       { effectid: "tileSlide", effect: tileSlide},
       { effectid: "tileBlind", effect: tileBlind}
       ] %}
-      {{ forms.dropdown("effect", "single", title, module.getOption("effect"), options, "effectid", "effect", helpText) }}      
+      {{ forms.dropdown("effect", "single", title, module.getOption("effect"), options, "effectid", "effect", helpText) }}
 
     </div>
   </div>
@@ -68,7 +69,7 @@
           </div>
         </form>
       </div>
-      
+
       <div class="XiboGrid" id="{{ random() }}">
         <div class="XiboData">
           <table id="mediaAssignments" class="table table-striped">
@@ -102,5 +103,3 @@
   </div>
 
 {% endblock %}
-
-  
