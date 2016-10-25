@@ -92,9 +92,9 @@ class Slideshow extends ModuleWidget
 
     public function validate()
     {
-        if ($this->getDuration() == 0)
-            throw new \InvalidArgumentException(__('Please enter a duration'));
-        elseif ($this->getDuration() < 100)
+        if ($this->getOption('imageDuration', 0) == 0)
+            throw new \InvalidArgumentException(__('Please enter a duration for each image'));
+        elseif ($this->getOption('imageDuration', 0) < 100)
             throw new \InvalidArgumentException(__('Duration is in milliseconds !'));
 
         if (count($this->getMediaList()) < 2)
